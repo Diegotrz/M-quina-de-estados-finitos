@@ -1,12 +1,14 @@
- module menu_comida(input AD, AT,SEL,CLC, clk, reset, output reg OP1,OP2,OP3,OP4,act );
+ module menu_bebida(input AD, AT,SEL,CLC,act, clk, reset, output reg B1,B2,B3,B4,act2 );
     reg [1:0] state, next_state; //Variables de estados definidas para que registren el dato anterior.
-    parameter M1 = 3'b000, M2 = 3'b001, M3 = 3'b010, M4 = 3'b100,S1 = 3'b101,S2 = 3'b011, S3 = 3'b110,S4 = 3'b111;
+    parameter M1 = 4'b0000, M2 = 4'b0001, M3 = 4'b0010, M4 = 4'b0100,S1 = 4'b1000,S2 = 4'b0011, S3 = 3'b1100,S4 = 4'b1001,IN =1010;
 
 
     // Nube combinacional para calcular el estado futuro
 
-    always @ (AD or AT or SEL or CLC or state) begin
+    always @ (AD or AT or SEL or CLC or state or act) begin
+	if (act==1)
         case (state)
+	
             M1: begin
                     if (AD == 1  )
                         next_state <= M2; //Avanza a la siguiente opción
@@ -69,13 +71,23 @@
                         next_state <= M1; //Vuelve al menú
 					else 
 						next_state <= S4; 		
-						
+		
+			IN:if ( CLC == 1  )
+                        next_state <= IN; //Vuelve al menú
+					else 
+						next_state <= IN; 
+
 						
 						
 			
             default: next_state <= M1; // Incluímos el 'default' para que la sintetización sea lógica combinacional y no secuencial
+
         endcase
-    end
+else
+	next_state <= IN;
+
+	end
+
 
     // Banco de flip flops
 
@@ -91,11 +103,11 @@
 
     always @ (state) begin
         case (state)
-            S1: begin OP1 = 1'b1;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;  end
-            S2: begin OP1 = 1'b0;OP2 = 1'b1;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;   end
-            S3: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b1;OP4 = 1'b0;act =1'b1;   end
-            S4: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b1;act =1'b1;  end
-            default: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;act =1'b0;  end
+            S1: begin B1 = 1'b1;B2 = 1'b0;B3 = 1'b0;B4 = 1'b1;  end
+            S2: begin B1 = 1'b0;B2 = 1'b1;B3 = 1'b0;B4 = 1'b1;   end
+            S3: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b1;B4 = 1'b1;   end
+            S4: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b0;B4 = 1'b1;  end
+            default: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b0;B4 = 1'b0;  end
         endcase
     end
 
