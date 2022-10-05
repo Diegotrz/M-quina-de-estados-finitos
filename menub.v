@@ -1,12 +1,12 @@
  module menu_bebida(input AD, AT,SEL,CLC,act, clk, reset, output reg B1,B2,B3,B4,act2 );
-    reg [1:0] state, next_state; //Variables de estados definidas para que registren el dato anterior.
-    parameter M1 = 4'b0000, M2 = 4'b0001, M3 = 4'b0010, M4 = 4'b0100,S1 = 4'b1000,S2 = 4'b0011, S3 = 3'b1100,S4 = 4'b1001,IN =1010;
+    reg [3:0] state, next_state; //Variables de estados definidas para que registren el dato anterior.
+    parameter M1 = 4'b0000, M2 = 4'b0001, M3 = 4'b0010, M4 = 4'b0100,S1 = 4'b1000,S2 = 4'b0011, S3 = 4'b1100,S4 = 4'b1001,IN =4'b1010;
 
 
     // Nube combinacional para calcular el estado futuro
 
     always @ (AD or AT or SEL or CLC or state or act) begin
-	if (act==1)
+
         case (state)
 	
             M1: begin
@@ -83,8 +83,7 @@
             default: next_state <= M1; // Incluímos el 'default' para que la sintetización sea lógica combinacional y no secuencial
 
         endcase
-else
-	next_state <= IN;
+
 
 	end
 
@@ -103,11 +102,15 @@ else
 
     always @ (state) begin
         case (state)
-            S1: begin B1 = 1'b1;B2 = 1'b0;B3 = 1'b0;B4 = 1'b1;  end
-            S2: begin B1 = 1'b0;B2 = 1'b1;B3 = 1'b0;B4 = 1'b1;   end
-            S3: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b1;B4 = 1'b1;   end
-            S4: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b0;B4 = 1'b1;  end
-            default: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b0;B4 = 1'b0;  end
+            M1: begin B1 = 1'b1;B2 = 1'b0;B3 = 1'b0;B4 = 1'b0;  end
+            M2: begin B1 = 1'b0;B2 = 1'b1;B3 = 1'b0;B4 = 1'b0;   end
+            M3: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b1;B4 = 1'b0;   end
+            M4: begin B1 = 1'b0;B2 = 1'b0;B3= 1'b0;B4 = 1'b1;  end
+			S1:begin B1 = 1'b0;B2 = 1'b0;B3  = 1'b0;B4 = 1'b1;act2 =1'b1;  end
+			S2:begin B1= 1'b0;B2 = 1'b0;B3  = 1'b1;B4 = 1'b0;act2 =1'b1;   end
+			S3:begin B1 = 1'b0;B2 = 1'b1;B3  = 1'b0;B4 = 1'b0;act2 =1'b1;   end
+			S4:begin B1 = 1'b1;B2 = 1'b0;B3  = 1'b0;B4 = 1'b0;act2 =1'b1;  end
+            default: begin B1 = 1'b0;B2 = 1'b0;B3 = 1'b0;B4 = 1'b0;act2=1'b0;  end
         endcase
     end
 

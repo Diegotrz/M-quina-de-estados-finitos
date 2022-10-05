@@ -1,5 +1,5 @@
  module menu_comida(input AD, AT,SEL,CLC, clk, reset, output reg OP1,OP2,OP3,OP4,act );
-    reg [1:0] state, next_state; //Variables de estados definidas para que registren el dato anterior.
+    reg [2:0] state, next_state; //Variables de estados definidas para que registren el dato anterior.
     parameter M1 = 3'b000, M2 = 3'b001, M3 = 3'b010, M4 = 3'b100,S1 = 3'b101,S2 = 3'b011, S3 = 3'b110,S4 = 3'b111;
 
 
@@ -91,10 +91,14 @@
 
     always @ (state) begin
         case (state)
-            S1: begin OP1 = 1'b1;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;  end
-            S2: begin OP1 = 1'b0;OP2 = 1'b1;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;   end
-            S3: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b1;OP4 = 1'b0;act =1'b1;   end
-            S4: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b1;act =1'b1;  end
+            M1: begin OP1 = 1'b1;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;  end
+            M2: begin OP1 = 1'b0;OP2 = 1'b1;OP3 = 1'b0;OP4 = 1'b0;  end
+            M3: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b1;OP4 = 1'b0;   end
+            M4: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b1;  end
+			S1:begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b1;act =1'b1;  end
+			S2:begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b1;OP4 = 1'b0;act =1'b1;   end
+			S3:begin OP1 = 1'b0;OP2 = 1'b1;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;   end
+			S4:begin OP1 = 1'b1;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;act =1'b1;  end
             default: begin OP1 = 1'b0;OP2 = 1'b0;OP3 = 1'b0;OP4 = 1'b0;act =1'b0;  end
         endcase
     end
